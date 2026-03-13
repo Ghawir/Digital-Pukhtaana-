@@ -475,4 +475,534 @@ footer {
 .ai-feat:hover { border-color: rgba(139,92,246,0.3); transform: translateY(-3px); }
 .ai-feat::before {
   content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, #7c3aed, #a78b
+  background: linear-gradient(90deg, #7c3aed, #a78bfa);
+  opacity: 0; transition: opacity 0.3s;
+}
+.ai-feat:hover::before { opacity: 1; }
+.ai-feat-icon { font-size: 1.6rem; margin-bottom: 12px; }
+.ai-feat-title { font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700; margin-bottom: 8px; color: white; }
+.ai-feat-desc { font-size: 12px; color: var(--muted); line-height: 1.6; font-weight: 300; }
+.ai-feat-examples { margin-top: 12px; }
+.ai-example {
+  font-size: 11px; color: #a78bfa; padding: 3px 0;
+  display: flex; gap: 6px; align-items: flex-start;
+}
+.ai-example::before { content: '→'; flex-shrink: 0; }
+
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+@keyframes float-pulse { 0%,100%{box-shadow:0 8px 32px rgba(37,211,102,0.5)} 50%{box-shadow:0 8px 48px rgba(37,211,102,0.8)} }
+
+@media(max-width:768px){
+  nav{padding:14px 16px;}
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .graphs-grid{grid-template-columns:1fr;}
+  .features-grid{grid-template-columns:1fr;}
+  .modules-grid{grid-template-columns:1fr;}
+  .social-grid{grid-template-columns:1fr;}
+  .pricing-top,.pricing-items,.pricing-bottom{padding-left:24px;padding-right:24px;}
+  .ai-hero-card{grid-template-columns:1fr;gap:24px;}
+  .ai-features-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="dollar-bg"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Digital <span>Pukhtaana</span></div>
+  <div class="nav-right">
+    <a href="https://facebook.com/DigitalPukhtaana" class="nav-icon" target="_blank">FB</a>
+    <a href="https://tiktok.com/@DigitalPukhtaana" class="nav-icon" target="_blank">TT</a>
+    <a href="https://wa.me/923340926285?text=Course%20join%20karna%20hai" class="nav-wa" target="_blank">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Join Karo
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><div class="badge-dot"></div>Enrollment Open · Limited Seats</div>
+    <h1>
+      <span class="line1">Ghar Baith Ke</span>
+      <span class="line2">Dollars Kamao</span>
+      <span class="line3">Facebook & TikTok Monetization — Pukhtoo mein A to Z</span>
+    </h1>
+    <p class="hero-sub">KPK ka pehla aur mukammal course — mobile se, apni zaban mein, koi experience ki zaroorat nahi.</p>
+    <div class="platform-row">
+      <div class="plat">📘 Facebook Monetization</div>
+      <div class="plat">🎵 TikTok Creator Fund</div>
+      <div class="plat">💰 Payoneer Withdrawal</div>
+    </div>
+    <div class="hero-ctas">
+      <a href="https://wa.me/923340926285?text=Course%20join%20karna%20hai" class="cta-primary" target="_blank">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        WhatsApp pe Join Karo
+      </a>
+      <a href="#graphs" class="cta-secondary">Results Dekho 📈</a>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <div class="ticker-item">💰 Facebook Monetization</div>
+    <div class="ticker-item">📈 TikTok Growth</div>
+    <div class="ticker-item">🎁 Free VPN + CapCut Pro</div>
+    <div class="ticker-item">📱 Mobile Se Karo</div>
+    <div class="ticker-item">🏆 100+ Students</div>
+    <div class="ticker-item">💵 Payoneer Withdrawal</div>
+    <div class="ticker-item">🔴 Pukhtoo mein A to Z</div>
+    <div class="ticker-item">⚡ Lifetime Support</div>
+    <!-- repeat -->
+    <div class="ticker-item">💰 Facebook Monetization</div>
+    <div class="ticker-item">📈 TikTok Growth</div>
+    <div class="ticker-item">🎁 Free VPN + CapCut Pro</div>
+    <div class="ticker-item">📱 Mobile Se Karo</div>
+    <div class="ticker-item">🏆 100+ Students</div>
+    <div class="ticker-item">💵 Payoneer Withdrawal</div>
+    <div class="ticker-item">🔴 Pukhtoo mein A to Z</div>
+    <div class="ticker-item">⚡ Lifetime Support</div>
+  </div>
+</div>
+
+<!-- STATS -->
+<section class="stats-section">
+  <div class="stats-grid">
+    <div class="stat-box"><div class="stat-num">100+</div><div class="stat-label">Active Students</div></div>
+    <div class="stat-box"><div class="stat-num">2</div><div class="stat-label">Platforms Covered</div></div>
+    <div class="stat-box"><div class="stat-num">4-6</div><div class="stat-label">Hafte mein Results</div></div>
+    <div class="stat-box"><div class="stat-num">24/7</div><div class="stat-label">Live Support</div></div>
+  </div>
+</section>
+
+<!-- GROWTH GRAPHS -->
+<section class="graphs-section" id="graphs">
+  <div class="graphs-header">
+    <div class="section-tag">Growth Results</div>
+    <h2 class="section-h">Students Ki <em>Real Growth</em></h2>
+    <p class="section-p">Course ke baad views, followers aur income — yeh numbers jhooth nahi bolte.</p>
+  </div>
+  <div class="graphs-grid">
+
+    <!-- FB Graph -->
+    <div class="graph-card">
+      <div class="graph-top">
+        <div class="graph-platform"><div class="graph-platform-dot dot-fb"></div>Facebook</div>
+        <div class="graph-change">↑ +340%</div>
+      </div>
+      <div class="graph-value">2.4M</div>
+      <div class="graph-sublabel">Monthly Views — Course ke baad</div>
+      <svg class="chart-svg" viewBox="0 0 300 100" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="fb-grad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#1877F2" stop-opacity="0.4"/>
+            <stop offset="100%" stop-color="#1877F2" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <path d="M0,90 L30,85 L60,80 L90,75 L120,65 L150,55 L180,40 L210,28 L240,15 L270,8 L300,4" stroke="#1877F2" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M0,90 L30,85 L60,80 L90,75 L120,65 L150,55 L180,40 L210,28 L240,15 L270,8 L300,4 L300,100 L0,100Z" fill="url(#fb-grad)"/>
+        <!-- dots -->
+        <circle cx="120" cy="65" r="3.5" fill="#1877F2"/>
+        <circle cx="210" cy="28" r="3.5" fill="#1877F2"/>
+        <circle cx="300" cy="4" r="4" fill="#1877F2"/>
+      </svg>
+      <div class="graph-footer">
+        <div class="graph-foot-item"><strong>Week 1</strong>Before Course</div>
+        <div class="graph-foot-item"><strong>Week 4</strong>Monetized</div>
+        <div class="graph-foot-item"><strong>Month 3</strong>Peak Growth</div>
+      </div>
+    </div>
+
+    <!-- TikTok Graph -->
+    <div class="graph-card tiktok">
+      <div class="graph-top">
+        <div class="graph-platform"><div class="graph-platform-dot dot-tt"></div>TikTok</div>
+        <div class="graph-change">↑ +520%</div>
+      </div>
+      <div class="graph-value">890K</div>
+      <div class="graph-sublabel">Monthly Views — Course ke baad</div>
+      <svg class="chart-svg" viewBox="0 0 300 100" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="tt-grad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#ff0050" stop-opacity="0.4"/>
+            <stop offset="100%" stop-color="#ff0050" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <path d="M0,95 L30,92 L60,88 L90,82 L120,70 L150,52 L180,35 L210,20 L240,10 L270,5 L300,2" stroke="#ff0050" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M0,95 L30,92 L60,88 L90,82 L120,70 L150,52 L180,35 L210,20 L240,10 L270,5 L300,2 L300,100 L0,100Z" fill="url(#tt-grad)"/>
+        <circle cx="120" cy="70" r="3.5" fill="#ff0050"/>
+        <circle cx="210" cy="20" r="3.5" fill="#ff0050"/>
+        <circle cx="300" cy="2" r="4" fill="#ff0050"/>
+      </svg>
+      <div class="graph-footer">
+        <div class="graph-foot-item"><strong>Week 1</strong>Before Course</div>
+        <div class="graph-foot-item"><strong>Week 3</strong>Viral Post</div>
+        <div class="graph-foot-item"><strong>Month 2</strong>Creator Fund</div>
+      </div>
+    </div>
+
+    <!-- Income Graph -->
+    <div class="graph-card" style="grid-column: 1 / -1;">
+      <div class="graph-top">
+        <div class="graph-platform"><div class="graph-platform-dot" style="background:var(--gold2)"></div>Monthly Income Growth (PKR)</div>
+        <div class="graph-change">↑ +800%</div>
+      </div>
+      <div class="graph-value" style="background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Rs. 25,000+</div>
+      <div class="graph-sublabel">Average student income after 3 months</div>
+      <svg class="chart-svg" viewBox="0 0 600 100" preserveAspectRatio="none" style="height:140px">
+        <defs>
+          <linearGradient id="inc-grad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#c9a84c" stop-opacity="0.4"/>
+            <stop offset="100%" stop-color="#c9a84c" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <!-- bar chart style -->
+        <rect x="10" y="88" width="40" height="12" fill="rgba(201,168,76,0.3)" rx="3"/>
+        <rect x="70" y="82" width="40" height="18" fill="rgba(201,168,76,0.4)" rx="3"/>
+        <rect x="130" y="70" width="40" height="30" fill="rgba(201,168,76,0.5)" rx="3"/>
+        <rect x="190" y="55" width="40" height="45" fill="rgba(201,168,76,0.6)" rx="3"/>
+        <rect x="250" y="38" width="40" height="62" fill="rgba(201,168,76,0.7)" rx="3"/>
+        <rect x="310" y="22" width="40" height="78" fill="rgba(201,168,76,0.8)" rx="3"/>
+        <rect x="370" y="10" width="40" height="90" fill="rgba(201,168,76,0.9)" rx="3"/>
+        <rect x="430" y="4" width="40" height="96" fill="#c9a84c" rx="3"/>
+        <rect x="490" y="1" width="40" height="99" fill="#e8c96a" rx="3"/>
+        <!-- labels -->
+        <text x="30" y="98" text-anchor="middle" fill="#8a9ab5" font-size="8">M1</text>
+        <text x="90" y="98" text-anchor="middle" fill="#8a9ab5" font-size="8">M2</text>
+        <text x="150" y="98" text-anchor="middle" fill="#8a9ab5" font-size="8">M3</text>
+        <text x="210" y="98" text-anchor="middle" fill="#8a9ab5" font-size="8">M4</text>
+        <text x="270" y="98" text-anchor="middle" fill="#8a9ab5" font-size="8">M5</text>
+        <text x="330" y="98" text-anchor="middle" fill="#8a9ab5" font-size="8">M6</text>
+        <text x="390" y="98" text-anchor="middle" fill="#8a9ab5" font-size="8">M7</text>
+        <text x="450" y="98" text-anchor="middle" fill="#8a9ab5" font-size="8">M8</text>
+        <text x="510" y="98" text-anchor="middle" fill="#8a9ab5" font-size="8">M9</text>
+      </svg>
+      <div class="graph-footer">
+        <div class="graph-foot-item"><strong>Month 1-2</strong>Setup Phase</div>
+        <div class="graph-foot-item"><strong>Month 3-4</strong>Monetized</div>
+        <div class="graph-foot-item"><strong>Month 6+</strong>Consistent Income</div>
+        <div class="graph-foot-item"><strong>Month 9+</strong>Rs. 25,000+/mo</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features-section">
+  <div class="features-inner">
+    <div class="section-tag">Kyun Humara Course?</div>
+    <h2 class="section-h">Sab Kuch <em>Ek Jagah</em></h2>
+    <p class="section-p">KPK mein koi doosra course nahi jo itna complete aur apni zaban mein ho.</p>
+    <div class="features-grid">
+      <div class="feat"><div class="feat-icon">🎯</div><div class="feat-title">Pukhtoo mein A to Z</div><div class="feat-desc">Poora course apni zaban mein — koi confusion nahi. Bilkul seedha aur simple.</div></div>
+      <div class="feat"><div class="feat-icon">📱</div><div class="feat-title">Sirf Phone Kaafi</div><div class="feat-desc">Laptop ki zaroorat nahi. Mobile se hi sab kuch seekho aur kamao.</div></div>
+      <div class="feat"><div class="feat-icon">🔴</div><div class="feat-title">Recorded Course</div><div class="feat-desc">Apni speed pe dekho — jab chaaho, jitni baar chaaho. Koi pressure nahi.</div></div>
+      <div class="feat"><div class="feat-icon">🛡️</div><div class="feat-title">Lifetime Support</div><div class="feat-desc">Course ke baad bhi hum saath hain. Koi bhi sawal — hum jawab denge.</div></div>
+      <div class="feat"><div class="feat-icon">💵</div><div class="feat-title">Payoneer Setup</div><div class="feat-desc">Dollars directly Pakistan mein — Payoneer se Easy Paisa tak sab cover.</div></div>
+      <div class="feat"><div class="feat-icon">🎁</div><div class="feat-title">Free Bonuses</div><div class="feat-desc">Surfshark VPN (1 month) + CapCut Pro — bilkul free saath mein!</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- MODULES -->
+<section class="modules-section">
+  <div class="modules-inner">
+    <div class="section-tag">Course Content</div>
+    <h2 class="section-h">Andar <em>Kya Milega?</em></h2>
+    <p class="section-p">Shuruaat se lekar paise nikalne tak — har step cover hai.</p>
+    <div class="modules-grid">
+      <div class="mod">
+        <div class="mod-head"><div class="mod-num">01</div><div class="mod-title">Foundation & Account Setup</div></div>
+        <div class="mod-body">
+          <div class="mod-item"><span class="mod-check">✓</span> Account properly optimize karna</div>
+          <div class="mod-item"><span class="mod-check">✓</span> Sahi niche choose karna</div>
+          <div class="mod-item"><span class="mod-check">✓</span> Profile pro level pe set karna</div>
+          <div class="mod-item"><span class="mod-check">✓</span> Content strategy banana</div>
+        </div>
+      </div>
+      <div class="mod">
+        <div class="mod-head"><div class="mod-num">02</div><div class="mod-title">Viral Content System</div></div>
+        <div class="mod-body">
+          <div class="mod-item"><span class="mod-check">✓</span> Hook formula — pehle 3 seconds</div>
+          <div class="mod-item"><span class="mod-check">✓</span> Trending audio use karna</div>
+          <div class="mod-item"><span class="mod-check">✓</span> Reels & TikTok editing tips</div>
+          <div class="mod-item"><span class="mod-check">✓</span> Consistency ka system</div>
+        </div>
+      </div>
+      <div class="mod">
+        <div class="mod-head"><div class="mod-num">03</div><div class="mod-title">Monetization Enable</div></div>
+        <div class="mod-body">
+          <div class="mod-item"><span class="mod-check">✓</span> Facebook monetization criteria</div>
+          <div class="mod-item"><span class="mod-check">✓</span> TikTok Creator Fund apply</div>
+          <div class="mod-item"><span class="mod-check">✓</span> LIVE gifts maximize karna</div>
+          <div class="mod-item"><span class="mod-check">✓</span> In-stream ads complete setup</div>
+        </div>
+      </div>
+      <div class="mod">
+        <div class="mod-head"><div class="mod-num">04</div><div class="mod-title">Paise Withdraw Karo</div></div>
+        <div class="mod-body">
+          <div class="mod-item"><span class="mod-check">✓</span> Payoneer account setup</div>
+          <div class="mod-item"><span class="mod-check">✓</span> Pakistan mein bank transfer</div>
+          <div class="mod-item"><span class="mod-check">✓</span> Easy Paisa / JazzCash options</div>
+          <div class="mod-item"><span class="mod-check">✓</span> Income track karna</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI MODULE -->
+<section class="ai-section">
+  <div class="ai-inner">
+    <div class="ai-badge"><div class="ai-badge-dot"></div>Bonus Module — Bilkul Free</div>
+    <div class="section-tag">AI Content Creation</div>
+    <h2 class="section-h">AI se <em>10x Fast</em> Content Banao</h2>
+    <p class="section-p">ChatGPT, Claude aur dusre AI tools se — captions, scripts, hooks, ideas — sab minutes mein ready!</p>
+
+    <div class="ai-hero-card">
+      <div>
+        <div class="ai-card-label">Bonus Module Include</div>
+        <div class="ai-card-title">AI <span>Content Machine</span> Ban Jao</div>
+        <div class="ai-card-desc">Roz naya content sochna mushkil hai — AI tools se yeh kaam 10 minute mein ho jaata hai. Yeh module sikhayega kaise AI ko apna personal content assistant banao.</div>
+        <div class="ai-tools">
+          <div class="ai-tool">🤖 ChatGPT</div>
+          <div class="ai-tool">✨ Claude AI</div>
+          <div class="ai-tool">🎨 Canva AI</div>
+          <div class="ai-tool">📱 CapCut AI</div>
+        </div>
+      </div>
+      <div class="ai-screen">
+        <div class="ai-screen-bar">
+          <div class="ai-dot" style="background:#ff5f57"></div>
+          <div class="ai-dot" style="background:#febc2e"></div>
+          <div class="ai-dot" style="background:#28c840"></div>
+          <span style="font-size:11px;color:#8a9ab5;margin-left:8px">ChatGPT</span>
+        </div>
+        <div class="ai-screen-body">
+          <div class="ai-prompt">Mujhe TikTok ke liye 5 viral hooks do Urdu mein</div>
+          <div class="ai-response">
+            <div class="ai-response-line">Yeh cheez jo tum roz karte ho — galat hai!</div>
+            <div class="ai-response-line">2 minute mein Rs. 500 — yeh seriously possible hai</div>
+            <div class="ai-response-line">Ammi ka secret — pehli baar share kar raha hun...</div>
+            <div class="ai-response-line">Is ek trick se mera account viral hua 🔥</div>
+            <div class="ai-response-line">Jo log kamyab hain — subah yeh karte hain 👇</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ai-features-grid">
+      <div class="ai-feat">
+        <div class="ai-feat-icon">🎯</div>
+        <div class="ai-feat-title">Viral Hooks Generate Karna</div>
+        <div class="ai-feat-desc">Pehle 3 seconds mein viewer ko rokna — AI se unlimited hooks banao apni niche ke liye.</div>
+        <div class="ai-feat-examples">
+          <div class="ai-example">Attention-grabbing openers</div>
+          <div class="ai-example">Curiosity-based hooks</div>
+          <div class="ai-example">Problem-solution hooks</div>
+        </div>
+      </div>
+      <div class="ai-feat">
+        <div class="ai-feat-icon">📝</div>
+        <div class="ai-feat-title">Captions & Scripts Likhna</div>
+        <div class="ai-feat-desc">Har post ke liye killer caption — Urdu, Pashto ya English mein — seconds mein ready.</div>
+        <div class="ai-feat-examples">
+          <div class="ai-example">FB post captions with CTA</div>
+          <div class="ai-example">TikTok video scripts A to Z</div>
+          <div class="ai-example">Reel descriptions + hashtags</div>
+        </div>
+      </div>
+      <div class="ai-feat">
+        <div class="ai-feat-icon">💡</div>
+        <div class="ai-feat-title">Video Ideas Generate Karna</div>
+        <div class="ai-feat-desc">Content ki kami kabhi nahi hogi — AI se 30 din ka content plan minutes mein banao.</div>
+        <div class="ai-feat-examples">
+          <div class="ai-example">Niche-specific video ideas</div>
+          <div class="ai-example">Trending topic research</div>
+          <div class="ai-example">30-day content calendar</div>
+        </div>
+      </div>
+      <div class="ai-feat">
+        <div class="ai-feat-icon">🖼️</div>
+        <div class="ai-feat-title">Thumbnail Ideas & Design</div>
+        <div class="ai-feat-desc">Canva AI aur CapCut se professional thumbnails — koi design experience nahi chahiye.</div>
+        <div class="ai-feat-examples">
+          <div class="ai-example">Click-worthy thumbnail concepts</div>
+          <div class="ai-example">Color psychology tips</div>
+          <div class="ai-example">Text overlay formulas</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section">
+  <div class="pricing-inner">
+    <div class="section-tag" style="text-align:center">Pricing</div>
+    <h2 class="section-h" style="text-align:center">Ek Baar — <em>Lifetime Ka Skill</em></h2>
+    <p class="section-p" style="margin:12px auto 0;text-align:center">Aur saath mein FREE bonuses bhi!</p>
+    <div class="pricing-card">
+      <div class="pricing-top">
+        <div class="pricing-label">Complete Package</div>
+        <div class="pricing-amount"><span class="pricing-cur">Rs.</span> 15,000</div>
+        <div class="pricing-sub">One-time · Lifetime Access · Recorded Course</div>
+      </div>
+      <div class="pricing-divider" style="margin:0 44px"></div>
+      <div class="pricing-items">
+        <div class="pricing-item"><span class="p-check">✓</span> FB + TikTok Monetization A to Z</div>
+        <div class="pricing-item"><span class="p-check">✓</span> Pukhtoo (Pashto) mein — bilkul simple</div>
+        <div class="pricing-item"><span class="p-check">✓</span> Recorded — apni speed pe dekho</div>
+        <div class="pricing-item"><span class="p-check">✓</span> Payoneer withdrawal complete guide</div>
+        <div class="pricing-item"><span class="p-check">✓</span> Lifetime Support hamesha saath</div>
+        <div class="pricing-item p-bonus"><span>🎁</span> FREE — 1 Month Surfshark VPN</div>
+        <div class="pricing-item p-bonus"><span>🎁</span> FREE — CapCut Pro</div>
+        <div class="pricing-item p-bonus"><span>🤖</span> FREE — AI Content Creation Module</div>
+      </div>
+      <div class="pricing-bottom">
+        <a href="https://wa.me/923340926285?text=Rs.%2015%2C000%20wala%20course%20join%20karna%20hai" class="pricing-btn" target="_blank">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp pe Join Karo
+        </a>
+        <div class="pricing-note">Easy Paisa: 03093928979 · Screenshot bhejo → Access milega ❤️</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL -->
+<section class="social-section">
+  <div class="social-inner">
+    <div class="section-tag">Humse Judo</div>
+    <h2 class="section-h">Hamare <em>Platforms</em></h2>
+    <p class="section-p">Facebook, TikTok ya WhatsApp — jahan comfortable ho wahan aao!</p>
+    <div class="social-grid">
+      <a href="https://facebook.com/DigitalPukhtaana" class="soc-card soc-fb" target="_blank">
+        <div class="soc-icon">📘</div>
+        <div class="soc-name">Facebook</div>
+        <div class="soc-handle">facebook.com/DigitalPukhtaana</div>
+      </a>
+      <a href="https://tiktok.com/@DigitalPukhtaana" class="soc-card soc-tt" target="_blank">
+        <div class="soc-icon">🎵</div>
+        <div class="soc-name">TikTok</div>
+        <div class="soc-handle">@DigitalPukhtaana</div>
+      </a>
+      <a href="https://wa.me/923340926285" class="soc-card soc-wa" target="_blank">
+        <div class="soc-icon">💬</div>
+        <div class="soc-name">WhatsApp</div>
+        <div class="soc-handle">+92 334 092 6285</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <h2>Ek Message —<br><em>Zindagi Badal Do</em></h2>
+  <p>WhatsApp pe message karo — hum personally guide karenge. Koi pressure nahi, sirf ek seedhi baat.</p>
+  <a href="https://wa.me/923340926285?text=Digital%20Pukhtaana%20course%20join%20karna%20hai" class="final-btn" target="_blank">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    WhatsApp pe Message Karo
+  </a>
+  <div style="margin-top:16px;font-size:13px;color:var(--muted)">📱 +92 334 092 6285</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Digital <span>Pukhtaana</span></div>
+  <div class="footer-links">
+    <a href="https://facebook.com/DigitalPukhtaana" target="_blank">Facebook</a>
+    <a href="https://tiktok.com/@DigitalPukhtaana" target="_blank">TikTok</a>
+    <a href="https://wa.me/923340926285" target="_blank">WhatsApp</a>
+  </div>
+  <div class="footer-copy">© 2025 Digital Pukhtaana · KPK ka #1 FB & TikTok Monetization Course</div>
+</footer>
+
+<!-- FLOAT WA -->
+<a href="https://wa.me/923340926285" class="float-wa" target="_blank">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script>
+// Dollar notes background
+const canvas = document.getElementById('dollar-bg');
+const ctx = canvas.getContext('2d');
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = document.body.scrollHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+const notes = [];
+for (let i = 0; i < 18; i++) {
+  notes.push({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * 3000,
+    w: 120 + Math.random() * 80,
+    rot: (Math.random() - 0.5) * 0.6,
+    opacity: 0.3 + Math.random() * 0.7
+  });
+}
+
+function drawNote(x, y, w, rot, opacity) {
+  const h = w * 0.45;
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rot);
+  ctx.globalAlpha = opacity;
+
+  // Note body
+  ctx.fillStyle = '#2d5a3d';
+  ctx.strokeStyle = '#4a7c5e';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.roundRect(-w/2, -h/2, w, h, 4);
+  ctx.fill();
+  ctx.stroke();
+
+  // Inner border
+  ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+  ctx.lineWidth = 0.5;
+  ctx.beginPath();
+  ctx.roundRect(-w/2+4, -h/2+4, w-8, h-8, 2);
+  ctx.stroke();
+
+  // $ symbol
+  ctx.fillStyle = 'rgba(255,255,255,0.5)';
+  ctx.font = `bold ${w*0.28}px serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('$', 0, 0);
+
+  // Corner numbers
+  ctx.font = `${w*0.09}px monospace`;
+  ctx.fillStyle = 'rgba(255,255,255,0.3)';
+  ctx.textAlign = 'left';
+  ctx.fillText('100', -w/2+7, -h/2+10);
+  ctx.textAlign = 'right';
+  ctx.fillText('100', w/2-7, h/2-6);
+
+  ctx.restore();
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  notes.forEach(n => drawNote(n.x, n.y, n.w, n.rot, n.opacity));
+}
+
+draw();
+window.addEventListener('resize', () => { resize(); draw(); });
+</script>
+
+</body>
+</html>
