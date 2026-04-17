@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Air Writer – Teaching Tool</title>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0a0a0a; font-family: 'Segoe UI', sans-serif; overflow: hidden; height: 100vh; width: 100vw; }
+#container { position: relative; width: 100vw; height: 100vh; }
+#video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); z-index: 1; }
+#drawCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
+#toolbar { position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 10; display: flex; gap: 12px; align-items: center; background: rgba(0,0,0,0.6); backdrop-filter: blur(12px); padding: 12px 20px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.15); }
+.color-btn { width: 32px; height: 32px; border-radius: 50%; border: 3px solid transparent; cursor: pointer; transition: transform 0.2s; }
+.color-btn:hover, .color-btn.active { transform: scale(1.3); border-color: white; }
+.tool-btn { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 13px; font-weight: 600; }
+.tool-btn.danger { background: rgba(220,50,50,0.4); }
+.size-slider { -webkit-appearance: none; width: 80px; height: 4px; background: rgba(255,255,255,0.3); border-radius: 2px; outline: none; }
+.size-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: white; cursor: pointer; }
+#status { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); z-index: 10; background: rgba(0,0,0,0.55); backdrop-filter: blur(8px); color: white; padding: 8px 20px; border-radius: 20px; font-size: 14px; font-weight: 600; border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; gap: 8px; }
+#dot { width: 10px; height: 10px; border-radius: 50%; background: #666; transition: background 0.3s; }
+#dot.ready { background: #00ff88; box-shadow: 0 0 8px #00ff88; }
+#dot.drawing { background: #ffcc00; box-shadow: 0 0 8px #ffcc00; }
+#cursor { position: absolute; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; pointer-events: none; z-index: 9; transform: translate(-50%, -50%); display: none; }
+#modeTag { position: absolute; top: 20px; right: 20px; z-index: 10; background: rgba(0,0,0,0.5); color: #aaa; padding: 6px 14px; border-radius: 12px; font-size: 12px; border: 1px solid rgba(255,255,255,0.1); }
+</style>
+</head>
+<body>
+<div id="container">
+  <video id="video" autoplay playsinline muted></video>
+  <canvas id="drawCanvas"></canvas>
+  <div id="cursor"></div>
+  <div id="status"><div id="dot"></div><span id="statusText">Camera start ho rahi hai...</span></div>
+  <div id="modeTag">☝️ 1 ungli = Likho | ✌️ 2 = Pause</div>
+  <div id="toolbar">
+    <div class="color-btn active" style="background:#ffff00" data-color="#ffff00"></div>
+    <div class="color-btn" style="background:#00ffff" data-color="#00ffff"></div>
+    <div class="color-btn" style="background:#ff4444" data-color="#ff4444"></div>
+    <div class="color-btn" style="background:#44ff88" data-color="#44ff88"></div>
+    <div class="color-btn" style="background:#ffffff" data-color="#ffffff"></div>
+    <div class="color-btn" style="background:#ff88ff" data-color="#ff88ff"></div>
+    <input type="range" class="size-slider" id="sizeSlider" min="3" max="30" value="8">
+    <button class="tool-btn" id="undoBtn">↩ Undo</button>
+    <button class="tool-btn danger" id="clearBtn">🗑 Clear</button>
+  </div>
+</div>
+<script>
+const video = document.getElementById('video');
+const drawCanvas = document.getElementById('drawCanvas');
+const ctx = drawCanvas.getContext('2d');
+const cursor = document.getElementById('cursor');
+const dot = document.getElementById('dot');
+const statusText = document.getElementById('statusText');
+let currentColor = '#ffff00';
+let brushSize = 8;
+let isDrawing = false;
+let lastX = null, lastY = null;
+let strokes = [];
+let currentStroke = [];
+
+function resize() {
+  drawCanvas.width = window.innerWidth;
+  drawCanvas.height = window.innerHeight;
+  redraw();
+}
+window.addEventListener('resize', resize);
+resize();
+
+document.querySelectorAll('.color-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentColor = btn.dataset.color;
+  });
+});
+
+document.getElementById('sizeSlider').addEventListener('input', e => { brushSize = parseInt(e.target.value); });
+document.getElementById('undoBtn').addEventListener('click', undo);
+document.addEventListener('keydown', e => { if (e.ctrlKey && e.key === 'z') undo(); });
+
+function undo() { if (strokes.length > 0) { strokes.pop(); redraw(); } }
+
+document.getElementById('clearBtn').addEventListener('click', () => {
+  strokes = [];
+  ctx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+});
+
+function redraw() {
+  ctx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+  strokes.forEach(stroke => {
+    if (stroke.points.length < 2) return;
+    ctx.beginPath();
+    ctx.strokeStyle = stroke.color;
+    ctx.lineWidth = stroke.size;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.shadowColor = stroke.color;
+    ctx.shadowBlur = stroke.size * 1.5;
+    ctx.globalAlpha = 0.92;
+    ctx.moveTo(stroke.points[0].x, stroke.points[0].y);
+    for (let i = 1; i < stroke.points.length; i++) { ctx.lineTo(stroke.points[i].x, stroke.points[i].y); }
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+    ctx.globalAlpha = 1;
+  });
+}
+
+function drawPoint(x, y, drawing) {
+  if (!drawing) { lastX = null; lastY = null; return; }
+  if (lastX === null) { lastX = x; lastY = y; currentStroke = [{x, y}]; return; }
+  ctx.beginPath();
+  ctx.strokeStyle = currentColor;
+  ctx.lineWidth = brushSize;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.shadowColor = currentColor;
+  ctx.shadowBlur = brushSize * 1.5;
+  ctx.globalAlpha = 0.92;
+  ctx.moveTo(lastX, lastY);
+  ctx.lineTo(x, y);
+  ctx.stroke();
+  ctx.shadowBlur = 0;
+  ctx.globalAlpha = 1;
+  currentStroke.push({x, y});
+  lastX = x; lastY = y;
+}
+
+function saveStroke() {
+  if (currentStroke.length > 1) { strokes.push({ points: [...currentStroke], color: currentColor, size: brushSize }); }
+  currentStroke = []; lastX = null; lastY = null;
+}
+
+const hands = new Hands({ locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}` });
+hands.setOptions({ maxNumHands: 1, modelComplexity: 1, minDetectionConfidence: 0.7, minTrackingConfidence: 0.6 });
+
+hands.onResults(function(results) {
+  dot.className = 'ready';
+  statusText.textContent = 'Haath dikhao';
+  if (!results.multiHandLandmarks || results.multiHandLandmarks.length === 0) {
+    cursor.style.display = 'none';
+    if (isDrawing) { saveStroke(); isDrawing = false; }
+    return;
+  }
+  const landmarks = results.multiHandLandmarks[0];
+  const index = landmarks[8];
+  const middle = landmarks[12];
+  const indexBase = landmarks[6];
+  const x = (1 - index.x) * drawCanvas.width;
+  const y = index.y * drawCanvas.height;
+  cursor.style.display = 'block';
+  cursor.style.left = x + 'px';
+  cursor.style.top = y + 'px';
+  cursor.style.borderColor = currentColor;
+  const indexUp = index.y < indexBase.y - 0.04;
+  const middleUp = middle.y < landmarks[10].y - 0.04;
+  const shouldDraw = indexUp && !middleUp;
+  if (shouldDraw) {
+    if (!isDrawing) { isDrawing = true; lastX = null; }
+    dot.className = 'drawing';
+    statusText.textContent = 'Likh raha hai...';
+    drawPoint(x, y, true);
+  } else {
+    if (isDrawing) { saveStroke(); isDrawing = false; }
+    statusText.textContent = 'Haath dikhao — 1 ungli utha';
+    drawPoint(x, y, false);
+  }
+});
+
+async function startCamera() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+    video.srcObject = stream;
+    const camera = new Camera(video, {
+      onFrame: async () => { await hands.send({ image: video }); },
+      width: 1280, height: 720
+    });
+    camera.start();
+    statusText.textContent = 'Loading...';
+  } catch (err) {
+    statusText.textContent = 'Camera permission do!';
+    dot.style.background = 'red';
+  }
+}
+startCamera();
+</script>
+</body>
+  </html>
